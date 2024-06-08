@@ -22,6 +22,15 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/api/grid/reset/route.ts",
+    "src/app/api/pixel/types/route.js",
+    "src/app/api/pixel/colour/route.js",
+    "src/lib/controllers/PixelTypesController.js"
+  ],
   "exclude": ["node_modules"]
 }
