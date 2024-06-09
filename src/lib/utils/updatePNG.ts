@@ -1,9 +1,10 @@
 import { PNG } from "pngjs";
 import fs from "fs";
-import { getPixelTypes } from "../controllers/PixelTypesController";
-const gridSize = parseInt(process.env.GRID_SIZE!);
+import PlaceConfig from "@/lib/utils/rplace-config";
+
+const gridSize = PlaceConfig.gridSize;
 export async function updatePNG(currentChanges: any[]) {
-  var PixelTypesList: Awaited<Promise<any[]>> = await getPixelTypes();
+  var PixelTypesList = PlaceConfig.PixelTypes;
 
   fs.createReadStream("./public/images/rplace-grid.png")
     .pipe(

@@ -30,7 +30,6 @@
     "src/app/api/grid/reset/route.ts",
     "src/app/api/pixel/types/route.js",
     "src/app/api/pixel/colour/route.js",
-    "src/lib/controllers/PixelTypesController.js"
   ],
   "exclude": ["node_modules"]
 }

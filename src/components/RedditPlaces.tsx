@@ -6,10 +6,10 @@ import Overlay from "./Overlay";
 
 let socket: any;
 function RedditPlaces() {
-  const [selectedPixel, setSelectedPixel] = useState({ X: 0, Y: 0, Colour: "red" });
+  const [selectedPixel, setSelectedPixel] = useState({ X: 0, Y: 0 });
   const [PixelChanges, setPixelChanges] = useState<Array<any>>([]);
-  const [PixelTypes, setPixelTypes] = useState<Array<any>>([]);
-  const isSocketConnected = useRef<Boolean>(false);
+  const [gridDetails, setGridDetails] = useState<Object>();
+  const isSocketConnected = useRef<Boolean>();
 
   const socketInitializer = async () => {
     socket = io({ autoConnect: true, reconnectionDelay: 500, reconnectionDelayMax: 500 });
@@ -26,12 +26,14 @@ function RedditPlaces() {
       setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, data]);
       console.log(`pixel-update: {X: ${X}, Y: ${Y}, colourID: ${colourID}}`);
     });
-    socket.on("hydrate-canvas", (data: any) => {
-      setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, ...data]);
-    });
   };
   const changePixel = async (selectedPaletteColour: String) => {
-    var { colourID } = PixelTypes.find((e: any) => e.Name === selectedPaletteColour);
+    if (!gridDetails) {
+      //missing grid details
+      fetchGridDetails();
+    }
+    
+    var { colourID } = gridDetails.PixelTypes.find((e: any) => e.Name === selectedPaletteColour);
     const response = await fetch("/api/pixel/colour", {
       method: "POST",
       headers: {
@@ -45,13 +47,23 @@ function RedditPlaces() {
       }),
     });
   };
-  const fetchPixelTypes = async () => {
-    await fetch("/api/pixel/types")
+  const fetchGridDetails = async () => {
+    await fetch("/api/grid/details")
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        setPixelTypes([...data]);
+        console.log(data.PlaceConfig);
+        setGridDetails(data.PlaceConfig);
+      });
+  };
+  const fetchPixelChanges = async () => {
+    await fetch("/api/pixel/changes")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, ...data]);
       });
   };
   useEffect(() => {
@@ -59,24 +71,23 @@ function RedditPlaces() {
   });
   useEffect(() => {
     socketInitializer();
-    fetchPixelTypes();
+    fetchPixelChanges();
+    fetchGridDetails();
 
     return () => {
-      socket.disconnect();
       socket.off("connect");
       socket.off("connect_error");
-      socket.off("hydrate-canvas");
-      socket.off("pixel-change");
       socket.off("pixel-update");
+      socket.disconnect();
 
       isSocketConnected.current = false;
     };
   }, []);
 
-  if (PixelTypes.length && isSocketConnected.current) {
+  if (gridDetails && isSocketConnected.current) {
     return (
       <>
-        <Canvas setSelectedPixel={setSelectedPixel} PixelChanges={PixelChanges} PixelTypes={PixelTypes} />
+        <Canvas setSelectedPixel={setSelectedPixel} PixelChanges={PixelChanges} gridDetails={gridDetails} />
         <Overlay selectedPixel={selectedPixel} changePixel={changePixel} />
       </>
     );

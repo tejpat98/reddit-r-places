@@ -6,7 +6,9 @@
 */
 import { PNG } from "pngjs";
 import fs from "fs";
-const gridSize = parseInt(process.env.GRID_SIZE!);
+import PlaceConfig from "@/lib/utils/rplace-config";
+
+const gridSize = PlaceConfig.gridSize;
 export async function createPNG(data: Uint8ClampedArray) {
   var png = new PNG({
     width: gridSize,

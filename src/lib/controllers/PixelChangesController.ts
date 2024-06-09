@@ -1,10 +1,10 @@
 import { dbConnect } from "../utils/db/db";
 import PixelChanges from "../utils/db/models/PixelChange";
-import PixelTypes from "../utils/db/models/PixelType";
 import { updatePNG } from "../utils/updatePNG";
-import { getPixelTypes } from "./PixelTypesController";
+import PlaceConfig from "@/lib/utils/rplace-config";
 
-const gridSize = parseInt(process.env.GRID_SIZE!);
+const gridSize = PlaceConfig.gridSize;
+let PixelTypesList = PlaceConfig.PixelTypes;
 
 let isUpdatingPNG: boolean = false;
 let changeBuffer: any[] = [];
@@ -12,10 +12,7 @@ let changeBuffer: any[] = [];
 let lastUpdated: Date | number = 0;
 let throttleDelay: number = 10000;
 
-let PixelTypesList: Awaited<any[]>;
-
 export async function addPixelChange(req: any) {
-  PixelTypesList = await getPixelTypes();
   var pixelChangeReq = validatePixelChange(req);
   if (pixelChangeReq.hasOwnProperty("error")) {
     return pixelChangeReq;

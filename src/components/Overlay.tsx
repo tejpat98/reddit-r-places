@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import Image from "next/image";
 
 let selectedPaletteColour = "red";
@@ -32,7 +32,7 @@ const paletteClick = (e: MouseEvent) => {
   //console.log(selectedPixel);
 };
 
-function Overlay({ selectedPixel, changePixel }: { selectedPixel: any; changePixel: any }) {
+const Overlay = memo(function Overlay({ selectedPixel, changePixel }: { selectedPixel: any; changePixel: any }) {
   const mainPanelRef = useRef<HTMLDivElement>(null);
   const paletteRef = useRef<HTMLDivElement>(null);
   const infoPanelRef = useRef<HTMLDivElement>(null);
@@ -90,8 +90,8 @@ function Overlay({ selectedPixel, changePixel }: { selectedPixel: any; changePix
               id="SelectBtn"
               onClick={() => {
                 changePixel(selectedPaletteColour);
-                document.getElementById("SelectBtn")?.classList.toggle("bg-gray-300");
-                setTimeout(() => document.getElementById("SelectBtn")?.classList.toggle("bg-gray-300"), 150);
+                document.getElementById("SelectBtn")?.classList.toggle("bg-gray-400");
+                setTimeout(() => document.getElementById("SelectBtn")?.classList.toggle("bg-gray-400"), 150);
               }}
               className="m-1 w-4/5 border-2 border-black rounded-full bg-white py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 hover:scale-105"
             >
@@ -122,6 +122,6 @@ function Overlay({ selectedPixel, changePixel }: { selectedPixel: any; changePix
       </div>
     </>
   );
-}
+});
 
 export default Overlay;
