@@ -4,11 +4,13 @@ import { io } from "socket.io-client";
 import Canvas from "./Canvas";
 import Overlay from "./Overlay";
 
+type gridDetails = { PixelTypes: any[]; gridSize: number };
+
 let socket: any;
 function RedditPlaces() {
   const [selectedPixel, setSelectedPixel] = useState({ X: 0, Y: 0 });
   const [PixelChanges, setPixelChanges] = useState<Array<any>>([]);
-  const [gridDetails, setGridDetails] = useState<Object>();
+  const [gridDetails, setGridDetails] = useState<gridDetails>();
   const isSocketConnected = useRef<Boolean>();
 
   const socketInitializer = async () => {
@@ -32,8 +34,8 @@ function RedditPlaces() {
       //missing grid details
       fetchGridDetails();
     }
-    
-    var { colourID } = gridDetails.PixelTypes.find((e: any) => e.Name === selectedPaletteColour);
+
+    var { colourID } = gridDetails!.PixelTypes.find((e) => e.Name === selectedPaletteColour);
     const response = await fetch("/api/pixel/colour", {
       method: "POST",
       headers: {
@@ -54,7 +56,7 @@ function RedditPlaces() {
       })
       .then((data) => {
         console.log(data.PlaceConfig);
-        setGridDetails(data.PlaceConfig);
+        setGridDetails({ PixelTypes: data.PlaceConfig.PixelTypes, gridSize: data.PlaceConfig.gridSize });
       });
   };
   const fetchPixelChanges = async () => {

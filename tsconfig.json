@@ -28,8 +28,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/api/grid/reset/route.ts",
+    "src/app/api/grid/details/route.ts",
     "src/app/api/pixel/types/route.js",
     "src/app/api/pixel/colour/route.js",
+    "globals.d.ts"
   ],
   "exclude": ["node_modules"]
 }

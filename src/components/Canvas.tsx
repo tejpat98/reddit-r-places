@@ -16,7 +16,7 @@ let pointer = { isMouseDown: false, mouseDownStart: { X: 0, Y: 0 }, current: { X
 const redraw = (PixelChanges: any[], gridDetails: any) => {
   PixelChanges.forEach((change) => {
     //Find PixelType with matching colourID to get RGB values
-    var { RGB } = gridDetails.PixelTypes.find((e) => e.colourID === change.colourID);
+    var { RGB } = gridDetails.PixelTypes.find((e: any) => e.colourID === change.colourID);
     var offsetY = 4 * gridDetails.gridSize * change.Y;
     var offsetX = 4 * change.X;
     var totalOffset = offsetY + offsetX;
@@ -149,7 +149,7 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
       //redraw to hydrate with intial changes from fetchPixelChanges
       redraw(PixelChanges, gridDetails);
     };
-  }, []);
+  }, [gridDetails]);
   useEffect(() => {
     canvasElement!.style.transformOrigin = `${0}px ${0}px`;
     canvasElement!.style.scale = `${zoomScale}`;
@@ -182,7 +182,8 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
 
       window.removeEventListener("resize", windowResize);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gridDetails]);
   return (
     <>
       <div className="relative w-screen h-screen overflow-hidden" style={{ scale: 1 }} ref={DivRef}>

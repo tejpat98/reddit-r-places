@@ -2,9 +2,11 @@ import { PNG } from "pngjs";
 import fs from "fs";
 import PlaceConfig from "@/lib/utils/rplace-config";
 
+type PixelTypes = any[];
+
 const gridSize = PlaceConfig.gridSize;
 export async function updatePNG(currentChanges: any[]) {
-  var PixelTypesList = PlaceConfig.PixelTypes;
+  var PixelTypesList: PixelTypes = PlaceConfig.PixelTypes;
 
   fs.createReadStream("./public/images/rplace-grid.png")
     .pipe(

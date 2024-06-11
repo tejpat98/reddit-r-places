@@ -9,7 +9,7 @@ let PixelTypesList = PlaceConfig.PixelTypes;
 let isUpdatingPNG: boolean = false;
 let changeBuffer: any[] = [];
 
-let lastUpdated: Date | number = 0;
+let lastUpdated: number = 0;
 let throttleDelay: number = 10000;
 
 export async function addPixelChange(req: any) {
@@ -36,7 +36,7 @@ export async function getAllChanges() {
 }
 
 export async function updateGrid() {
-  var currentTime = new Date();
+  var currentTime = Date.now();
   if (currentTime - lastUpdated > throttleDelay) {
     isUpdatingPNG = true;
     await dbConnect();
@@ -54,7 +54,7 @@ export async function updateGrid() {
       isUpdatingPNG = false;
       clearChangeBuffer();
       //update lastUpadated time to reset cooldown on updatePNG
-      lastUpdated = new Date();
+      lastUpdated = Date.now();
     }
     return;
   } else {
