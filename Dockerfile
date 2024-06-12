@@ -16,5 +16,8 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 3000
 
-# Run the application.
+#define DB uri
+ENV MONGODB_URI: ${MONGODB_URI}
+
+# Run the application. (node server.mjs)
 CMD npm run start
