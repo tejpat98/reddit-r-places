@@ -18,15 +18,15 @@ function RedditPlaces() {
     socket.connect();
     socket.on("connect", () => {
       isSocketConnected.current = true;
-      console.log("Connected to server, my id: " + socket.id);
+      //console.log("Connected to server, my id: " + socket.id);
     });
     socket.on("connect_error", (err: any) => {
-      console.log("error: ", err);
+      //console.log("error: ", err);
     });
     socket.on("pixel-update", (data: any) => {
       var { X, Y, colourID } = data;
       setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, data]);
-      console.log(`pixel-update: {X: ${X}, Y: ${Y}, colourID: ${colourID}}`);
+      //console.log(`pixel-update: {X: ${X}, Y: ${Y}, colourID: ${colourID}}`);
     });
   };
   const changePixel = async (selectedPaletteColour: String) => {
@@ -55,7 +55,7 @@ function RedditPlaces() {
         return res.json();
       })
       .then((data) => {
-        console.log(data.PlaceConfig);
+        //console.log(data.PlaceConfig);
         setGridDetails({ PixelTypes: data.PlaceConfig.PixelTypes, gridSize: data.PlaceConfig.gridSize });
       });
   };
@@ -69,7 +69,7 @@ function RedditPlaces() {
       });
   };
   useEffect(() => {
-    console.log(PixelChanges);
+    //console.log(PixelChanges);
   });
   useEffect(() => {
     socketInitializer();
