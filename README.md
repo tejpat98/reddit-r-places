@@ -2,7 +2,9 @@
 
 ## Description
 
-This is a remake/clone of a popular game found on [reddit.com/r/place](https://www.reddit.com/r/place/). Made using NextJS, MongoDB and Socket.io.
+This is a remake/clone of a popular game found on [reddit.com/r/place](https://www.reddit.com/r/place/).
+
+Made using NextJS, MongoDB and Socket.io.
 
 The user is given a canvas from which they can select a pixel, and set a colour for that pixel. These changes are then sent and displayed in real time to all connected users via socket.io.
 
