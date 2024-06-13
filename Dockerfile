@@ -32,7 +32,6 @@ COPY --from=builder --chown=node:node /app/reddit-r-place-assets ./reddit-r-plac
 COPY --from=builder --chown=node:node /app/.next ./.next
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/public ./public
-COPY --from=builder --chown=node:node /app/src ./src
 
 ENV MONGODB_URI="mongodb://root:pass@host.docker.internal:27018/?authSource=admin"
 ENV DB_NAME="reddit-r-place"
