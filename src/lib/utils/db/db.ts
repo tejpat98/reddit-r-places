@@ -16,7 +16,7 @@ export async function dbConnect() {
       .then(
         () => {
           //fulfilled
-          return console.log("( ✔ ) Connected to MongoDB");
+          return console.log("( ✔ ) Connected to MongoDB" + " Database: " + DB_NAME);
         },
         () => {
           //onreject

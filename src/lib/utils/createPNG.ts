@@ -7,6 +7,7 @@
 import { PNG } from "pngjs";
 import fs from "fs";
 import PlaceConfig from "@/lib/utils/rplace-config";
+import { refetchPNG } from "./fetchPNG";
 
 const gridSize = PlaceConfig.gridSize;
 export async function createPNG(data: Uint8ClampedArray) {
@@ -24,7 +25,11 @@ export async function createPNG(data: Uint8ClampedArray) {
       png.data[idx + 3] = data[idx + 3]; // alpha (0 is transparent)
     }
   }
-  //Create new rplace-grid.png (overrides old file)
-  png.pack().pipe(fs.createWriteStream("./public/images/rplace-grid.png"));
+
+  var pngBuffer = PNG.sync.write(png);
+  fs.writeFileSync("./reddit-r-place-assets/rplace-grid.png", pngBuffer);
+
+  refetchPNG();
+
   console.log("created new PNG");
 }

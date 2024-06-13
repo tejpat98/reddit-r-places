@@ -8,6 +8,7 @@ let div: HTMLDivElement | null = null;
 let selectorImg: HTMLImageElement | null = null;
 let ctx: CanvasRenderingContext2D;
 let gridData: ImageData;
+let gridImg: any;
 let zoomScale = 1;
 let selector = { OffsetX: 0, OffsetY: 0, X: 0, Y: 0 };
 let canvas = { panOffsetX: 0, panOffsetY: 0, click: { downX: 0, downY: 0, upX: 0, upY: 0 } };
@@ -107,6 +108,21 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
       }
     }
   };
+  const fetchCurrentGrid = async () => {
+    await fetch("/api/grid/current").then(async (res) => {
+      var parsed = JSON.parse(await res.json());
+      var buffer = Buffer.from(parsed.blob, "base64");
+      var pngFile = new File([buffer], "grid.png", { type: "image/png" });
+      var gridImgURL = URL.createObjectURL(pngFile);
+      gridImg = new Image();
+      gridImg.src = gridImgURL;
+      gridImg.onload = () => {
+        ctx.drawImage(gridImg, 0, 0);
+        gridData = ctx.getImageData(0, 0, gridDetails.gridSize, gridDetails.gridSize);
+        redraw(PixelChanges, gridDetails);
+      };
+    });
+  };
   useEffect(() => {
     canvasElement = canvasDivRef.current;
     div = DivRef.current;
@@ -119,14 +135,9 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
     }
   });
   useEffect(() => {
-    var gridImg = new Image();
-    gridImg.src = "/images/rplace-grid.png";
-    gridImg.onload = () => {
+    fetchCurrentGrid().then(() => {
       isImageLoading.current = false;
-      ctx.drawImage(gridImg, 0, 0);
-      gridData = ctx.getImageData(0, 0, gridDetails.gridSize, gridDetails.gridSize);
-      redraw(PixelChanges, gridDetails);
-    };
+    });
   }, [gridDetails]);
   useEffect(() => {
     canvasElement!.style.transformOrigin = `${0}px ${0}px`;

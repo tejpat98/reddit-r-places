@@ -1,6 +1,7 @@
 import { PNG } from "pngjs";
 import fs from "fs";
 import PlaceConfig from "@/lib/utils/rplace-config";
+import { fetchPNG, refetchPNG } from "./fetchPNG";
 
 type PixelTypes = any[];
 
@@ -8,26 +9,22 @@ const gridSize = PlaceConfig.gridSize;
 export async function updatePNG(currentChanges: any[]) {
   var PixelTypesList: PixelTypes = PlaceConfig.PixelTypes;
 
-  fs.createReadStream("./public/images/rplace-grid.png")
-    .pipe(
-      new PNG({
-        width: gridSize,
-        height: gridSize,
-        filterType: -1,
-      })
-    )
-    .on("parsed", function () {
-      currentChanges.forEach((change) => {
-        var { RGB } = PixelTypesList.find((e) => e.colourID === change.colourID);
-        var offsetY = 4 * gridSize * change.Y;
-        var offsetX = 4 * change.X;
-        var totalOffset = offsetY + offsetX;
+  var file = fs.readFileSync("./reddit-r-place-assets/rplace-grid.png");
+  var pngFile = PNG.sync.read(file);
 
-        this.data[totalOffset] = RGB[0];
-        this.data[totalOffset + 1] = RGB[1];
-        this.data[totalOffset + 2] = RGB[2];
-      });
+  currentChanges.forEach((change) => {
+    var { RGB } = PixelTypesList.find((e) => e.colourID === change.colourID);
+    var offsetY = 4 * gridSize * change.Y;
+    var offsetX = 4 * change.X;
+    var totalOffset = offsetY + offsetX;
 
-      this.pack().pipe(fs.createWriteStream("./public/images/rplace-grid.png"));
-    });
+    pngFile.data[totalOffset] = RGB[0];
+    pngFile.data[totalOffset + 1] = RGB[1];
+    pngFile.data[totalOffset + 2] = RGB[2];
+  });
+
+  var pngBuffer = PNG.sync.write(pngFile);
+  fs.writeFileSync("./reddit-r-place-assets/rplace-grid.png", pngBuffer);
+
+  refetchPNG();
 }
