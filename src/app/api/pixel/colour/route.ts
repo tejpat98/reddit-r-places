@@ -1,6 +1,7 @@
 //setPixelColour
 import { addPixelChange, updateGrid } from "@/lib/controllers/PixelChangesController";
-import { Server } from "socket.io";
+
+export const revalidate = 0;
 
 export async function POST(req: Request, res: any) {
   const { X, Y, colourID, socketID } = await req.json();
@@ -16,7 +17,6 @@ export async function POST(req: Request, res: any) {
     return new Response(JSON.stringify(result), { headers: { "Content-type": "application/json" }, status: 400 });
   } else {
     //sucessful --> send change to all connected sockets
-    //sendChange(change);
     global.Socket_IO.emit("pixel-update", change);
     await updateGrid();
     return new Response(JSON.stringify(result), { headers: { "Content-type": "application/json" }, status: 201 });
