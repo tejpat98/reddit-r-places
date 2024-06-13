@@ -4,9 +4,9 @@
 
 This is a remake/clone of a popular game found on [reddit.com/r/place](https://www.reddit.com/r/place/). Made using NextJS, MongoDB and Socket.io.
 
-The user given a canvas from which they can select a pixel, and set a colour for any pixel. These changes are then sent and displayed in real time to all connected users via socket.io.
+The user is given a canvas from which they can select a pixel, and set a colour for that pixel. These changes are then sent and displayed in real time to all connected users via socket.io.
 
-By default the grid is 500 by 500, it made much bigger by setting gridSize in rplace-config.js
+By default the grid is 500 by 500, it can made much bigger by setting gridSize in rplace-config.js
 
 ## Instructions
 
@@ -28,7 +28,7 @@ By default the grid is 500 by 500, it made much bigger by setting gridSize in rp
 ## Contributing
 
 You are free to use this code as you wish.
-This project complete enough to be usable, but here are some things that could be improved / added:
+This project is complete enough to be usable, but here are some things that could be improved / added:
 
 - [ ] Zoom on pointer
 - Either...
