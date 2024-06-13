@@ -1,7 +1,7 @@
 import { PNG } from "pngjs";
 import fs from "fs";
-import PlaceConfig from "@/lib/utils/rplace-config";
-import { fetchPNG, refetchPNG } from "./fetchPNG";
+import PlaceConfig from "@/lib/utils/rplace-config.js";
+import { refetchPNG } from "./fetchPNG";
 
 type PixelTypes = any[];
 

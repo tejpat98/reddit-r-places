@@ -6,7 +6,7 @@
 import PixelChanges from "@/lib/utils/db/models/PixelChange";
 import { createPNG } from "@/lib/utils/createPNG";
 import { dbConnect } from "@/lib/utils/db/db";
-import PlaceConfig from "@/lib/utils/rplace-config";
+import PlaceConfig from "@/lib/utils/rplace-config.js";
 
 const PixelTypesList = PlaceConfig.PixelTypes;
 const gridSize = PlaceConfig.gridSize;
