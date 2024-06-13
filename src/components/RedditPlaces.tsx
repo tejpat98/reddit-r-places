@@ -68,6 +68,7 @@ function RedditPlaces() {
         return res.json();
       })
       .then((data) => {
+        console.log(PixelChanges);
         setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, ...data]);
       });
   };
