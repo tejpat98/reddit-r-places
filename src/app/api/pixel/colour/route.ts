@@ -1,5 +1,6 @@
 //setPixelColour
 import { addPixelChange, updateGrid } from "@/lib/controllers/PixelChangesController";
+import { Server } from "socket.io";
 
 export async function POST(req: Request, res: any) {
   const { X, Y, colourID, socketID } = await req.json();

@@ -15,12 +15,10 @@ let pointer = { isMouseDown: false, mouseDownStart: { X: 0, Y: 0 }, current: { X
 
 const redraw = (PixelChanges: any[], gridDetails: any) => {
   PixelChanges.forEach((change) => {
-    //Find PixelType with matching colourID to get RGB values
     var { RGB } = gridDetails.PixelTypes.find((e: any) => e.colourID === change.colourID);
     var offsetY = 4 * gridDetails.gridSize * change.Y;
     var offsetX = 4 * change.X;
     var totalOffset = offsetY + offsetX;
-    //set RGB value for the pixel
     gridData.data[totalOffset] = RGB[0];
     gridData.data[totalOffset + 1] = RGB[1];
     gridData.data[totalOffset + 2] = RGB[2];
@@ -38,16 +36,13 @@ const setTransform = () => {
   selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
 };
 const mouseSCROLL = (e: WheelEvent) => {
-  //set scale value on canvas
   if (e.deltaY < 0 && zoomScale < 20) {
     zoomScale *= 1.1;
   } else if (e.deltaY > 0 && zoomScale > 0.5) {
     zoomScale /= 1.1;
   }
 
-  //size of a pixel at current zoomScale (pixels by default are size of 1)
   var pixelSize = 1 * zoomScale;
-  //Recalculate the selector Offset for new zoomScale
   selector.OffsetX = pixelSize * selector.X;
   selector.OffsetY = pixelSize * selector.Y;
 
@@ -55,14 +50,12 @@ const mouseSCROLL = (e: WheelEvent) => {
 };
 const mouseMOVE = (e: MouseEvent) => {
   if (pointer.isMouseDown) {
-    //if panning --> update the pan offset
     canvas.panOffsetX = e.clientX - pointer.mouseDownStart.X;
     canvas.panOffsetY = e.clientY - pointer.mouseDownStart.Y;
 
     setTransform();
   }
 
-  //current will give x,y where the top-left will be (0,0) and bottom-right (width * zoomScale, height * zoomScale)
   pointer.current.X = e.clientX - canvas.panOffsetX;
   pointer.current.Y = e.clientY - canvas.panOffsetY;
 };
@@ -71,16 +64,12 @@ const mouseDOWN = (e: MouseEvent) => {
   pointer.mouseDownStart.X = e.clientX - canvas.panOffsetX;
   pointer.mouseDownStart.Y = e.clientY - canvas.panOffsetY;
   pointer.isMouseDown = true;
-  // console.log(
-  //   `pointer.current.X: ${pointer.current.X}, pointer.current.Y: ${pointer.current.Y} | zoomScale: ${zoomScale}`
-  // );
 };
 const mouseUP = (e: MouseEvent) => {
   e.preventDefault();
   pointer.isMouseDown = false;
 };
 const mouseLEAVE = (e: MouseEvent) => {
-  // When mouse cursor moves out of the window element
   if (pointer.isMouseDown) {
     e.preventDefault();
     pointer.isMouseDown = false;
@@ -106,21 +95,14 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
       var deltaX = Math.abs(canvas.click.downX - canvas.click.upX);
       var deltaY = Math.abs(canvas.click.downY - canvas.click.upY);
       if (deltaX > 5 || deltaY > 5) {
-        //significant delta x or y between mouse down and up --> user is probably panning
       } else {
-        //move selector to the pixel that was clicked
-        //size of a pixel at current zoomScale (pixels by default are size of 1)
         var pixelSize = 1 * zoomScale;
-        //which pixel was clicked on the rPlace grid
         selector.X = Math.floor(pointer.current.X / pixelSize);
         selector.Y = Math.floor(pointer.current.Y / pixelSize);
 
-        //Calculate the offset to put selector onto the selector
         selector.OffsetX = pixelSize * selector.X;
         selector.OffsetY = pixelSize * selector.Y;
-        //Set selectedPixel useState for rPlaces
         setSelectedPixel({ X: selector.X, Y: selector.Y });
-        //console.log("selected pixel: " + selector.X, selector.Y);
         setTransform();
       }
     }
@@ -133,7 +115,6 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
     ctx = canvasElement!.getContext("2d")!;
 
     if (isImageLoading.current == false) {
-      //redraw with lastest changes
       redraw(PixelChanges, gridDetails);
     }
   });
@@ -142,11 +123,8 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
     gridImg.src = "/images/rplace-grid.png";
     gridImg.onload = () => {
       isImageLoading.current = false;
-      //draw inital grid from PNG
       ctx.drawImage(gridImg, 0, 0);
-      //extract imageData obj
       gridData = ctx.getImageData(0, 0, gridDetails.gridSize, gridDetails.gridSize);
-      //redraw to hydrate with intial changes from fetchPixelChanges
       redraw(PixelChanges, gridDetails);
     };
   }, [gridDetails]);
@@ -170,8 +148,6 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
     window.addEventListener("resize", windowResize);
 
     return () => {
-      //The cleanup function runs during unmount, and before every re-render with changed dependencies.
-
       div?.removeEventListener("wheel", mouseSCROLL);
       div?.removeEventListener("mousemove", mouseMOVE);
       div?.removeEventListener("mousedown", mouseDOWN);

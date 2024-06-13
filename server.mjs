@@ -12,14 +12,10 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
-  //SocketIO.setInstance(httpServer);
 
   global.Socket_IO = new Server(httpServer, {
     path: "",
     addTrailingSlash: false,
-    cors: {
-      origin: "http://localhost:3000",
-    },
     connectionStateRecovery: {
       // the backup duration of the sessions and the packets
       maxDisconnectionDuration: 2 * 60 * 1000,

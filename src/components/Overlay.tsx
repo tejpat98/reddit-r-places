@@ -17,19 +17,13 @@ const togglePanel = (e: MouseEvent) => {
 const paletteClick = (e: MouseEvent) => {
   let targetElement = e.target as HTMLDivElement;
   if (targetElement.id == "paletteGrid") {
-    //if target element is the paletteGrid div, ignore and return
     return;
   }
-  //change to gray border on previously selected colour div
   document.getElementById(selectedPaletteColour)?.classList.toggle("border-black");
   document.getElementById(selectedPaletteColour)?.classList.toggle("border-gray-300");
-  //set black border on selected colour div
   targetElement.classList.toggle("border-black");
   targetElement.classList.toggle("border-gray-300");
-  //set new selectedPaletteColour
   selectedPaletteColour = targetElement.id.toString();
-  //console.log("Currently selected: " + selectedPaletteColour);
-  //console.log(selectedPixel);
 };
 
 const Overlay = memo(function Overlay({ selectedPixel, changePixel }: { selectedPixel: any; changePixel: any }) {

@@ -1,5 +1,5 @@
-# inherit from a existing image to add the functionality
-FROM node:20-alpine
+# Build step
+FROM node:20-alpine as builder
 
 # Set the working directory
 WORKDIR /app
@@ -13,6 +13,22 @@ RUN npm install
 # Copy the rest of the source files into the image.
 COPY . .
 
+RUN npm run build
+
+FROM node:20-alpine as runner
+
+WORKDIR /app
+
+COPY --from=builder --chown=node:node /app/package.json ./
+COPY --from=builder --chown=node:node /app/package-lock.json ./
+COPY --from=builder --chown=node:node /app/next.config.js ./
+
+
+COPY --from=builder --chown=node:node /app/.next ./.next
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/src ./src
+
 # Expose the port that the application listens on.
 EXPOSE 3000
 
@@ -20,5 +36,5 @@ EXPOSE 3000
 ENV MONGODB_URI: ${MONGODB_URI}
 ENV DB_NAME: ${DB_NAME}
 
-# Run the application. (node server.mjs)
+# Run the application. 
 CMD npm run start
