@@ -28,8 +28,8 @@ The user given a canvas from which they can select a pixel, and set a colour for
 You are free to use this code as you wish.
 This project complete enough to be usable, but here are some things that could be improved / added:
 
-1. [ ] Zoom on pointer
-2. Either...
-   - [ ] Migrate to a redis DB (for more performace)
-   - [ ] Add more data e.g. change timestamps, users, cooldowns (per user/pixel)
-3. [ ] The client will track all the pixel changes it receives from the server in a useState called PixelChanges (/src/components/RedditPlaces.tsx lines 12 and 33), after a change is applied to gridData (Canvas.tsx line 18) it is no longer needed. Set PixelChanges to a filtered array (using setPixelChange) that excludes changes that have already been applied to gridData.
+- [ ] Zoom on pointer
+- Either...
+  - [ ] Migrate to a redis DB (for more performace)
+  - [ ] Add more data e.g. change timestamps, users, cooldowns (per user/pixel)
+- [ ] The client will track all the pixel changes it receives from the server in a useState called PixelChanges (/src/components/RedditPlaces.tsx lines 12 and 33), after a change is applied to gridData (Canvas.tsx line 18) it is no longer needed. Set PixelChanges to a filtered array (using setPixelChange) that excludes changes that have already been applied to gridData.
