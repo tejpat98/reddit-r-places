@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Reddit /r/place game
 
-## Getting Started
+## Description
 
-First, run the development server:
+This is a remake/clone of a popular game found on [reddit.com/r/place](https://www.reddit.com/r/place/). Made using NextJS, MongoDB and Socket.io.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The user given a canvas from which they can select a pixel, and set a colour for any pixel. These changes are then sent and displayed in real time to all connected users via socket.io. By default the grid is 500 by 500.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  Setup a MongoDB instance
+2.  Set MONGODB_URI and DB_NAME
+3.  At the root of the directory
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+        npm install
+        npm run build
+        npm run start
 
-## Learn More
+    ... or for dockerised version
 
-To learn more about Next.js, take a look at the following resources:
+            docker build -t reddit-r-place .
+            docker run -dp 3000:3000 reddit-r-place
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4.  http://localhost:3000
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+You are free to use this code as you wish.
+This project complete enough to be usable, but here are some things that could be improved / added:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. [ ] Zoom on pointer
+2. Either...
+   - [ ] Migrate to a redis DB (for more performace)
+   - [ ] Add more data e.g. change timestamps, users, cooldowns (per user/pixel)
+3. [ ] The client will track all the pixel changes it receives from the server in a useState called PixelChanges (/src/components/RedditPlaces.tsx lines 12 and 33), after a change is applied to gridData (Canvas.tsx line 18) it is no longer needed. Set PixelChanges to a filtered array (using setPixelChange) that excludes changes that have already been applied to gridData.
