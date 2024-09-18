@@ -11,8 +11,16 @@ let gridData: ImageData;
 let gridImg: any;
 let zoomScale = 1;
 let selector = { OffsetX: 0, OffsetY: 0, X: 0, Y: 0 };
-let canvas = { panOffsetX: 0, panOffsetY: 0, click: { downX: 0, downY: 0, upX: 0, upY: 0 } };
-let pointer = { isMouseDown: false, mouseDownStart: { X: 0, Y: 0 }, current: { X: 0, Y: 0 } };
+let canvas = {
+  panOffsetX: 0,
+  panOffsetY: 0,
+  click: { downX: 0, downY: 0, upX: 0, upY: 0 },
+};
+let pointer = {
+  isMouseDown: false,
+  mouseDownStart: { X: 0, Y: 0 },
+  current: { X: 0, Y: 0 },
+};
 
 const redraw = (PixelChanges: any[], gridDetails: any) => {
   PixelChanges.forEach((change) => {
@@ -37,6 +45,7 @@ const setTransform = () => {
   selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
 };
 const mouseSCROLL = (e: WheelEvent) => {
+  e.preventDefault();
   if (e.deltaY < 0 && zoomScale < 20) {
     zoomScale *= 1.1;
   } else if (e.deltaY > 0 && zoomScale > 0.5) {
@@ -78,7 +87,15 @@ const mouseLEAVE = (e: MouseEvent) => {
 };
 const windowResize = () => {};
 
-const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetails }: { setSelectedPixel: any; PixelChanges: any[]; gridDetails: any }) {
+const Canvas = memo(function Canvas({
+  setSelectedPixel,
+  PixelChanges,
+  gridDetails,
+}: {
+  setSelectedPixel: any;
+  PixelChanges: any[];
+  gridDetails: any;
+}) {
   const canvasDivRef = useRef<HTMLCanvasElement>(null);
   const DivRef = useRef<HTMLDivElement>(null);
   const selectorImgRef = useRef<HTMLImageElement>(null);
@@ -173,7 +190,7 @@ const Canvas = memo(function Canvas({ setSelectedPixel, PixelChanges, gridDetail
   }, [gridDetails]);
   return (
     <>
-      <div className="relative w-screen h-screen overflow-hidden" style={{ scale: 1 }} ref={DivRef}>
+      <div className="relative h-screen w-screen overflow-hidden" style={{ scale: 1 }} ref={DivRef}>
         <canvas
           ref={canvasDivRef}
           style={{

@@ -38,7 +38,9 @@ function RedditPlaces() {
     if (!gridDetails) {
       fetchGridDetails();
     }
-    var { colourID } = gridDetails!.PixelTypes.find((e) => e.Name === selectedPaletteColour);
+    var { colourID } = gridDetails!.PixelTypes.find(
+      (e) => e.Name === selectedPaletteColour,
+    );
     const response = await fetch("/api/pixel/colour", {
       method: "POST",
       headers: {
@@ -59,7 +61,10 @@ function RedditPlaces() {
       })
       .then((data) => {
         console.log(data.PlaceConfig);
-        setGridDetails({ PixelTypes: data.PlaceConfig.PixelTypes, gridSize: data.PlaceConfig.gridSize });
+        setGridDetails({
+          PixelTypes: data.PlaceConfig.PixelTypes,
+          gridSize: data.PlaceConfig.gridSize,
+        });
       });
   };
   const fetchPixelChanges = async () => {
@@ -69,7 +74,10 @@ function RedditPlaces() {
       })
       .then((data) => {
         console.log(PixelChanges);
-        setPixelChanges((prevPixelChanges: any[]) => [...prevPixelChanges, ...data]);
+        setPixelChanges((prevPixelChanges: any[]) => [
+          ...prevPixelChanges,
+          ...data,
+        ]);
       });
   };
   useEffect(() => {
@@ -91,13 +99,21 @@ function RedditPlaces() {
     <>
       {gridDetails && isSocketConnected ? (
         <>
-          <Canvas setSelectedPixel={setSelectedPixel} PixelChanges={PixelChanges} gridDetails={gridDetails} />
+          <Canvas
+            setSelectedPixel={setSelectedPixel}
+            PixelChanges={PixelChanges}
+            gridDetails={gridDetails}
+          />
           <Overlay selectedPixel={selectedPixel} changePixel={changePixel} />
         </>
       ) : (
         <>
-          <div className="grid place-items-center h-screen">
-            <div className="animate-spin inline-block w-20 h-20 border-[3px] border-current border-t-transparent text-yellow-1000 rounded-full" role="status" aria-label="loading">
+          <div className="grid h-screen place-items-center">
+            <div
+              className="text-yellow-1000 inline-block h-20 w-20 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+              role="status"
+              aria-label="loading"
+            >
               <span className="sr-only">Loading...</span>
             </div>
           </div>

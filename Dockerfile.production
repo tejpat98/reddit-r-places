@@ -31,6 +31,7 @@ COPY --from=builder --chown=node:node /app/public ./public
 
 # Expose the port that the application listens on.
 EXPOSE 3000
+USER node
 
 # Run the application. 
 CMD npm run start

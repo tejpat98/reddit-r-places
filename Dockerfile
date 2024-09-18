@@ -13,10 +13,6 @@ RUN npm install
 # Copy the rest of the source files into the image.
 COPY . .
 
-#define URI and DB name 
-ENV MONGODB_URI="mongodb://root:pass@host.docker.internal:27018/?authSource=admin"
-ENV DB_NAME="reddit-r-place"
-
 RUN npm run build
 
 FROM node:20-alpine as runner
