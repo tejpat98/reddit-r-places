@@ -35,44 +35,44 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
   ctx.putImageData(gridData, 0, 0);
 };
 const setTransform = () => {
-  // Calculate the selector's position centered on the selected pixel
+  // Calculate selector’s offset based on the scaled position (keeping it centered on the selected pixel)
   const totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.X * zoomScale - (selectorImg!.width * zoomScale) / 2, // Corrected translation based on selector width
-    dy: canvas.panOffsetY + selector.Y * zoomScale - (selectorImg!.height * zoomScale) / 2, // Corrected translation based on selector height
+    dx: canvas.panOffsetX + selector.X * zoomScale - (selectorImg!.width * zoomScale) / 2,
+    dy: canvas.panOffsetY + selector.Y * zoomScale - (selectorImg!.height * zoomScale) / 2,
   };
 
-  // Apply zoom scale to canvas
+  // Apply the scale to the canvas element
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  // Apply zoom scale to the selector image and center it
+  // Apply the scale to the selector icon (keep it centered around the selected pixel)
   selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale})`;
 };
 
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
 
-  // Normalize trackpad vs mouse scroll (wheelStep for consistency)
-  const wheelStep = 100; // This is a base value for a mouse wheel
+  // Normalize deltaY values to account for trackpad vs mouse differences
+  const wheelStep = 120; // Standard scroll step for mouse
   let normalizedDelta = e.deltaY;
 
   if (e.deltaMode === 0) {
-    // Trackpad: Normalize deltaY for smoother zoom
-    normalizedDelta /= wheelStep * 0.5; // Adjust as needed to get a smoother result
+    // Trackpad normalization (reduce sensitivity)
+    normalizedDelta /= wheelStep; // Adjust the scroll factor for smoother zoom
   }
 
-  // Zoom scale factor
+  // Zoom factor for smooth zooming
   const zoomFactor = 1.1;
 
-  // Adjust zoom based on scrolling direction
+  // Apply zooming in or out based on scroll direction
   if (normalizedDelta < 0 && zoomScale < 20) {
-    zoomScale *= zoomFactor;
+    zoomScale *= zoomFactor; // Zoom in
   } else if (normalizedDelta > 0 && zoomScale > 0.5) {
-    zoomScale /= zoomFactor;
+    zoomScale /= zoomFactor; // Zoom out
   }
 
-  // Adjust selector position and scale
+  // Recalculate the offset of the selector based on the zoom
   const pixelSize = zoomScale;
-  selector.OffsetX = selector.X * pixelSize; // Update offset based on new zoom
+  selector.OffsetX = selector.X * pixelSize;
   selector.OffsetY = selector.Y * pixelSize;
 
   setTransform();
