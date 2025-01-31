@@ -35,45 +35,26 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
   ctx.putImageData(gridData, 0, 0);
 };
 const setTransform = () => {
-  // Calculate selector’s offset based on the scaled position (keeping it centered on the selected pixel)
-  const totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.X * zoomScale - (selectorImg!.width * zoomScale) / 2,
-    dy: canvas.panOffsetY + selector.Y * zoomScale - (selectorImg!.height * zoomScale) / 2,
+  var totalSelectorOffset = {
+    dx: canvas.panOffsetX + selector.OffsetX + (1 * zoomScale - 1) / 2,
+    dy: canvas.panOffsetY + selector.OffsetY + (1 * zoomScale - 1) / 2,
   };
 
-  // Apply the scale to the canvas element
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  // Apply the scale to the selector icon (keep it centered around the selected pixel)
-  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale})`;
+  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
 };
-
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
-
-  // Normalize deltaY values to account for trackpad vs mouse differences
-  const wheelStep = 120; // Standard scroll step for mouse
-  let normalizedDelta = e.deltaY;
-
-  if (e.deltaMode === 0) {
-    // Trackpad normalization (reduce sensitivity)
-    normalizedDelta /= wheelStep; // Adjust the scroll factor for smoother zoom
+  if (e.deltaY < 0 && zoomScale < 20) {
+    zoomScale *= 1.1;
+  } else if (e.deltaY > 0 && zoomScale > 0.5) {
+    zoomScale /= 1.1;
   }
 
-  // Zoom factor for smooth zooming
-  const zoomFactor = 1.1;
-
-  // Apply zooming in or out based on scroll direction
-  if (normalizedDelta < 0 && zoomScale < 20) {
-    zoomScale *= zoomFactor; // Zoom in
-  } else if (normalizedDelta > 0 && zoomScale > 0.5) {
-    zoomScale /= zoomFactor; // Zoom out
-  }
-
-  // Recalculate the offset of the selector based on the zoom
-  const pixelSize = zoomScale;
-  selector.OffsetX = selector.X * pixelSize;
-  selector.OffsetY = selector.Y * pixelSize;
+  var pixelSize = 1 * zoomScale;
+  selector.OffsetX = pixelSize * selector.X;
+  selector.OffsetY = pixelSize * selector.Y;
 
   setTransform();
 };
