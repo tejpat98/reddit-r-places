@@ -35,16 +35,16 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
   ctx.putImageData(gridData, 0, 0);
 };
 const setTransform = () => {
-  // Center selector around the selected pixel, adjusting with zoom scale
+  // Center the selector exactly on the selected pixel, taking zoom into account
   var totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.X * zoomScale - selectorImg!.width / 2, // Center the selector
-    dy: canvas.panOffsetY + selector.Y * zoomScale - selectorImg!.height / 2, // Center the selector
+    dx: canvas.panOffsetX + selector.X * zoomScale - (selectorImg!.width * zoomScale) / 2, // Center the selector at selected pixel
+    dy: canvas.panOffsetY + selector.Y * zoomScale - (selectorImg!.height * zoomScale) / 2, // Center the selector vertically
   };
 
-  // Apply zoom scale to canvas
+  // Apply zoom scale to the canvas
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  // Scale the selector based on zoom level, and make sure it's centered properly
+  // Apply zoom scale to the selector image and center it
   selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale})`;
 };
 
