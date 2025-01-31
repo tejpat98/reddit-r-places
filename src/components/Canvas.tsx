@@ -56,15 +56,10 @@ const setTransform = () => {
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
 
-  if (e.deltaMode === 0) {
-    // This is likely a trackpad scroll
-  } else {
-    // This is a mouse scroll (wheel)
-    if (e.deltaY < 0 && zoomScale < 20) {
-      zoomScale *= 1.1;
-    } else if (e.deltaY > 0 && zoomScale > 0.5) {
-      zoomScale /= 1.1;
-    }
+  if (e.deltaY < 0 && zoomScale < 20) {
+    zoomScale *= 1.1;
+  } else if (e.deltaY > 0 && zoomScale > 0.5) {
+    zoomScale /= 1.1;
   }
 
   var pixelSize = 1 * zoomScale;
