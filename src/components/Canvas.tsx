@@ -46,10 +46,23 @@ const setTransform = () => {
 };
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
-  if (e.deltaY < 0 && zoomScale < 20) {
-    zoomScale *= 1.1;
-  } else if (e.deltaY > 0 && zoomScale > 0.5) {
-    zoomScale /= 1.1;
+  // Normalize deltaY values across devices
+  const wheelStep = 100; // Standard mouse wheel step
+  let normalizedDelta = e.deltaY;
+
+  if (e.deltaMode === 0) {
+    // Trackpad (pixel-based scrolling)
+    normalizedDelta /= wheelStep; // Scale down trackpad input
+  }
+
+  // Define zoom factor (log scale for smoothness)
+  const zoomFactor = 1.1; // Adjust for responsiveness
+
+  // Apply zoom uniformly
+  if (normalizedDelta < 0 && zoomScale < 20) {
+    zoomScale *= zoomFactor;
+  } else if (normalizedDelta > 0 && zoomScale > 0.5) {
+    zoomScale /= zoomFactor;
   }
 
   var pixelSize = 1 * zoomScale;
