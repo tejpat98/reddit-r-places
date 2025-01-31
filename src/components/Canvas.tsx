@@ -35,31 +35,27 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
   ctx.putImageData(gridData, 0, 0);
 };
 const setTransform = () => {
-  // Get device pixel ratio to account for screen resolution
-  const dpr = window.devicePixelRatio || 1; // Defaults to 1 if DPR is not available
-
-  // Apply scaling based on the current zoom level and device pixel ratio
-  const totalZoomScale = zoomScale * dpr;
-
-  // Adjust the offset for selector icon based on zoom
   var totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.OffsetX * totalZoomScale + (1 * zoomScale - 1) / 2,
-    dy: canvas.panOffsetY + selector.OffsetY * totalZoomScale + (1 * zoomScale - 1) / 2,
+    dx: canvas.panOffsetX + selector.OffsetX + (1 * zoomScale - 1) / 2,
+    dy: canvas.panOffsetY + selector.OffsetY + (1 * zoomScale - 1) / 2,
   };
 
-  // Apply the transform for canvas element: scale canvas and handle page zoom
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  // Apply transform to the selector image with adjusted zoom and scale to align with canvas
-  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${totalZoomScale * 1.2})`;
+  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
 };
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
 
-  if (e.deltaY < 0 && zoomScale < 20) {
-    zoomScale *= 1.1;
-  } else if (e.deltaY > 0 && zoomScale > 0.5) {
-    zoomScale /= 1.1;
+  if (e.deltaMode === 0) {
+    // This is likely a trackpad scroll
+  } else {
+    // This is a mouse scroll (wheel)
+    if (e.deltaY < 0 && zoomScale < 20) {
+      zoomScale *= 1.1;
+    } else if (e.deltaY > 0 && zoomScale > 0.5) {
+      zoomScale /= 1.1;
+    }
   }
 
   var pixelSize = 1 * zoomScale;
