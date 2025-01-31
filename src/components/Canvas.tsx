@@ -35,26 +35,45 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
   ctx.putImageData(gridData, 0, 0);
 };
 const setTransform = () => {
+  // Center selector around the selected pixel, adjusting with zoom scale
   var totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.OffsetX + (1 * zoomScale - 1) / 2,
-    dy: canvas.panOffsetY + selector.OffsetY + (1 * zoomScale - 1) / 2,
+    dx: canvas.panOffsetX + selector.X * zoomScale - selectorImg!.width / 2, // Center the selector
+    dy: canvas.panOffsetY + selector.Y * zoomScale - selectorImg!.height / 2, // Center the selector
   };
 
+  // Apply zoom scale to canvas
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
+  // Scale the selector based on zoom level, and make sure it's centered properly
+  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale})`;
 };
+
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
-  if (e.deltaY < 0 && zoomScale < 20) {
-    zoomScale *= 1.1;
-  } else if (e.deltaY > 0 && zoomScale > 0.5) {
-    zoomScale /= 1.1;
+
+  // Normalize trackpad vs mouse scroll (wheelStep for consistency)
+  const wheelStep = 100; // This is a base value for a mouse wheel
+  let normalizedDelta = e.deltaY;
+
+  if (e.deltaMode === 0) {
+    // Trackpad: Normalize deltaY for smoother zoom
+    normalizedDelta /= wheelStep * 0.5; // Adjust as needed to get a smoother result
   }
 
-  var pixelSize = 1 * zoomScale;
-  selector.OffsetX = pixelSize * selector.X;
-  selector.OffsetY = pixelSize * selector.Y;
+  // Zoom scale factor
+  const zoomFactor = 1.1;
+
+  // Adjust zoom based on scrolling direction
+  if (normalizedDelta < 0 && zoomScale < 20) {
+    zoomScale *= zoomFactor;
+  } else if (normalizedDelta > 0 && zoomScale > 0.5) {
+    zoomScale /= zoomFactor;
+  }
+
+  // Adjust selector position and scale
+  const pixelSize = zoomScale;
+  selector.OffsetX = selector.X * pixelSize; // Update offset based on new zoom
+  selector.OffsetY = selector.Y * pixelSize;
 
   setTransform();
 };
