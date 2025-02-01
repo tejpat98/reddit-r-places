@@ -40,9 +40,9 @@ const setTransform = () => {
     dy: canvas.panOffsetY + selector.OffsetY + (1 * zoomScale - 1) / 2,
   };
 
-  canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale / window.devicePixelRatio})`;
+  canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${(zoomScale * 1.2) / window.devicePixelRatio})`;
+  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2 * window.devicePixelRatio})`;
 };
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
