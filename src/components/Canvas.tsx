@@ -36,8 +36,8 @@ const redraw = (PixelChanges: any[], gridDetails: any) => {
 };
 const setTransform = () => {
   var totalSelectorOffset = {
-    dx: canvas.panOffsetX + selector.OffsetX + Math.floor((1 * (zoomScale / window.devicePixelRatio) - 1) / 2),
-    dy: canvas.panOffsetY + selector.OffsetY + Math.floor((1 * (zoomScale / window.devicePixelRatio) - 1) / 2),
+    dx: canvas.panOffsetX + selector.OffsetX + Math.round((1 * (zoomScale / window.devicePixelRatio) - 1) / 2),
+    dy: canvas.panOffsetY + selector.OffsetY + Math.round((1 * (zoomScale / window.devicePixelRatio) - 1) / 2),
   };
 
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
