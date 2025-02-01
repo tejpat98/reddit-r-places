@@ -40,7 +40,7 @@ const setTransform = () => {
     dy: canvas.panOffsetY + selector.OffsetY + (1 * zoomScale - 1) / 2,
   };
 
-  canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
+  canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale / window.devicePixelRatio})`;
 
   selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${(zoomScale * 1.2) / window.devicePixelRatio})`;
 };
