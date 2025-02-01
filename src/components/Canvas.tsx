@@ -166,7 +166,7 @@ const Canvas = memo(function Canvas({
     selectorImg!.style.top = `${0}px`;
     selectorImg!.style.left = `${0}px`;
 
-    console.log(`device PixelRatio: ${window.devicePixelRatio}`);
+    console.log(`devicePixelRatio: ${window.devicePixelRatio}`);
 
     div?.addEventListener("wheel", mouseSCROLL);
     div?.addEventListener("mousemove", mouseMOVE);
