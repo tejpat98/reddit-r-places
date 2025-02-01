@@ -42,7 +42,7 @@ const setTransform = () => {
 
   canvasElement!.style.transform = `translate(${canvas.panOffsetX}px, ${canvas.panOffsetY}px) scale(${zoomScale})`;
 
-  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2 * window.devicePixelRatio})`;
+  selectorImg!.style.transform = `translate(${totalSelectorOffset.dx}px, ${totalSelectorOffset.dy}px) scale(${zoomScale * 1.2})`;
 };
 const mouseSCROLL = (e: WheelEvent) => {
   e.preventDefault();
